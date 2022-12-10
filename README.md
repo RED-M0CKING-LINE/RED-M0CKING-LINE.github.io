@@ -1,1 +1,4 @@
-# RED-M0CKING-LINE.github.io
+Welcome.
+
+To contact me, please email ethan@ethanashley.net
+
