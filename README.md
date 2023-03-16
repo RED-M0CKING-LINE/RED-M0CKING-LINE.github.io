@@ -1,3 +1,3 @@
 Welcome.
 
-To contact me, please email ethan@ethanashley.net
+To contact me, please email ethan@mail.ethanashley.net
