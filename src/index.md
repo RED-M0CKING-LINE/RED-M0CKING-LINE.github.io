@@ -1,3 +1,5 @@
-Welcome.
+Welcome. This website is a placeholder. 
 
-To contact me, please email ethan@ethanashley.net
+I do eventually plan to do *something* with this domain, but it is not a high priority at the moment.
+
+To contact me, please email ethan@mail.ethanashley.net
