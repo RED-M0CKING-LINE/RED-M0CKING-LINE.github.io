@@ -1,0 +1,41 @@
+{{define "title"}}{{.SiteName}}{{end}}
+{{define "content"}}
+<section class="hero">
+  <p class="eyebrow">Projects - Interest - Skills - Goals</p>
+  <h1 class="hero-title">Ethan Ashley</h1>
+  <p class="hero-lede">My new and actually improved personal site </br>Actuall updated after years</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="/blog">Read my blog</a>
+    <a class="btn btn-ghost" href="/tools">Use my tools</a>
+  </div>
+</section>
+
+<section class="features">
+  <article class="card">
+    <h2>Cloud infrastructure</h2>
+    <p>I like the design of cloud and the goals it can accomplish.</p>
+  </article>
+  <article class="card">
+    <h2>Automation</h2>
+    <p>Using Ansible, Python, and much more. From switches to chromebooks, if a machine can do it, it will.</p>
+  </article>
+</section>
+
+{{if .RecentPosts}}
+<section class="recent">
+  <header class="section-head">
+    <h2>Latest posts</h2>
+    <a href="/blog" class="see-all">All posts --></a>
+  </header>
+  <ul class="post-list">
+    {{range .RecentPosts}}
+      <li class="post-item">
+        <time datetime="{{fmtISO .Meta.Date}}">{{fmtDate .Meta.Date}}</time>
+        <a href="/blog/{{.Slug}}"><h3>{{.Meta.Title}}</h3></a>
+        <p>{{.Meta.Summary}}</p>
+      </li>
+    {{end}}
+  </ul>
+</section>
+{{end}}
+{{end}}

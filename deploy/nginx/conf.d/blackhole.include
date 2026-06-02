@@ -1,0 +1,40 @@
+# Blackhole scanning https://blog.mikihands.com/en/whitedec/2025/12/5/malicious-bot-nginx-blackhole/ 444 drops the connection
+
+# Block unused methods
+if ($request_method !~ ^(GET|HEAD|POST)$) { return 405; }
+
+# Block bad bots
+if ($bad_bot) { return 444; }
+
+# 1. Hidden/config directories (.git, .env, IDEs, etc.)
+location ~* (^|/)\.(git|hg|svn|bzr|DS_Store|idea|vscode)(/|$)   { return 444; }
+location ~* (^|/)\.env(\.|$)                                    { return 444; }
+location ~* (^|/)\.(?:bash_history|ssh|aws|npm|yarn)(/|$)       { return 444; }
+
+# 2. Unused CMS admin / vulnerability scan paths
+location ^~ /administrator/     { return 444; }
+location ^~ /phpmyadmin/        { return 444; }
+
+# 3. PHP/CGI/WordPress remnants
+# Only for stacks that never use PHP (Node, Go, Python, etc.)
+location ~* \.(?:php\d*|phtml|phps|phar)(/|$)               { return 444; }
+location ^~ /cgi-bin/                                       { return 444; }
+location ~* ^/(wp-admin|wp-includes|wp-content)(/|$)        { return 444; }
+location ~* /(?:wp-login\.php|xmlrpc\.php|phpmyadmin)/?$    { return 444; }
+
+# 4. Common scanner targets
+location ~* ^/(?:info|phpinfo|test|wso|shell|gecko|moon|root|manager|system_log)\.php(?:/|$)?       { return 444; }
+location ~* ^/(?:autoload_classmap|composer\.(?:json|lock)|package\.json|yarn\.lock|vendor)(?:/|$)  { return 444; }
+location ~* ^/(?:_profiler|xmrlpc|xmlrpc|phpversion)\.php(?:/|$)?                                   { return 444; }
+
+# 5. Backup/temporary/dump files
+location ~* \.(?:bak|backup|old|orig|save|swp|swo|tmp|sql(?:\.gz)?|tgz|zip|rar)$    { return 444; }
+
+# 6. well-known: allow only ACME, block the rest
+# location ^~ /.well-known/acme-challenge/ { # I dont have acme configured with LE
+#     root /var/www/letsencrypt;
+# }
+location ^~ /.well-known/   { return 444; }
+
+# 7. Method guard (optional): block rarely used methods
+if ($request_method !~ ^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$) { return 405; }

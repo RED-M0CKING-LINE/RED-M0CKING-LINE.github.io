@@ -1,0 +1,23 @@
+{{define "title"}}Tools - {{.SiteName}}{{end}}
+{{define "content"}}
+<header class="page-head">
+  <h1>Tools</h1>
+  <p class="page-sub">Small utilities.</p>
+</header>
+
+<section class="tool" id="cidr">
+  <h2>CIDR calculator</h2>
+  <p class="tool-help">Enter an IPv4 CIDR (e.g. <code>100.64.0.0/10</code>/<code>fe80::1234/64</code>) to see network, broadcast, mask, host range, and usable host count.</p>
+  <form id="cidr-form" autocomplete="off">
+    <label for="cidr-input" class="sr-only">CIDR</label>
+    <input id="cidr-input" name="cidr" type="text" placeholder="0.0.0.0/0" spellcheck="false" />
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form>
+  <div id="cidr-status" class="tool-status" role="status" aria-live="polite">Loading WASM…</div>
+  <dl id="cidr-result" class="kv" hidden></dl>
+</section>
+{{end}}
+{{define "scripts"}}
+<script src="/static/wasm/wasm_exec.js"></script>
+<script src="/static/js/tools.js" defer></script>
+{{end}}

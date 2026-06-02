@@ -1,0 +1,45 @@
+{{define "title"}}About & status - {{.SiteName}}{{end}}
+{{define "content"}}
+<header class="page-head">
+  <h1>About</h1>
+</header>
+
+<section class="prose">
+  <h2>Who am I?</h2>
+  <p>I am Ethan Ashley.</p>
+  <p>I like computers and cool shit. More specifically, I like backend cloud infrastructure, linux systems, automation, and containerization.</p>
+  <p>There will be more information as I complete a page on me and publish my CV and resume on this site. More to come...</p>
+  <p>In the meantime, you can contact me at contact@ethanashley.net</p>
+  <h2>What is this?</h2>
+  <p>This is my personal site. Its for whatever I want to put up here. Tooling, information, etc</p>
+  <h3>Why</h3>
+  <p>Because I have a domain and I'd like to use it. Additionally there have been many cases where I wanted to share information and I had to send them a copy of the file, rather than linking to it on this site.</p>
+  <p>Also, I want somewhere to host tooling because I cannot always remember which sites have the good versions of a tool and I cannot rely on them always being there.</p>
+  <p>The design goals of this site are to be modular, flexible, and extendable. I should be able to put just about anything on this site with a clean structure and have it maintain continuity with the rest of the site</p>
+  <p>Additionally, I dislike front end web dev, and front end in general, but a website is the easiest way to make a nicer interface for my programs.</p>
+</section>
+
+<header class="page-head">
+  <h1>Status</h1>
+</header>
+
+<section class="status-grid">
+  <div class="card stat">
+    <p class="stat-label">Uptime</p>
+    <p class="stat-value">{{.Uptime}}</p>
+  </div>
+  <div class="card stat">
+    <p class="stat-label">CPUs</p>
+    <p class="stat-value">{{.NumCPU}}</p>
+  </div>
+  <div class="card stat">
+    <p class="stat-label">OIDC</p>
+    <p class="stat-value">{{if .OIDCEnabled}}enabled{{else}}disabled{{end}}</p>
+  </div>
+  <div class="card stat">
+    <p class="stat-label">Environment</p>
+    <p class="stat-value">{{.SiteName}} {{if .IsProd}}Prod{{else}}Dev{{end}}</p>
+  </div>
+</section>
+
+{{end}}

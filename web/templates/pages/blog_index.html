@@ -1,0 +1,26 @@
+{{define "title"}}Blog - {{.SiteName}}{{end}}
+{{define "content"}}
+<header class="page-head">
+  <h1>Blog</h1>
+  <p class="page-sub">Notes from unlikely tangents and infrastructure trenches. This blog will contain whatever I find useful or interesting.</br>Subscribe via <a href="/feed.xml">Atom</a>{{template "rss-icon.html" .}}</p>
+</header>
+
+{{if .Posts}}
+<ul class="post-list">
+  {{range .Posts}}
+    <li class="post-item">
+      <time datetime="{{fmtISO .Meta.Date}}">{{fmtDate .Meta.Date}}</time>
+      <a href="/blog/{{.Slug}}"><h2>{{.Meta.Title}}</h2></a>
+      <p>{{.Meta.Summary}}</p>
+      {{if .Meta.Tags}}
+        <ul class="tag-list">
+          {{range .Meta.Tags}}<li class="tag">#{{.}}</li>{{end}}
+        </ul>
+      {{end}}
+    </li>
+  {{end}}
+</ul>
+{{else}}
+<p class="empty">No posts yet. Drop a Markdown file into <code>content/blog/</code>.</p>
+{{end}}
+{{end}}

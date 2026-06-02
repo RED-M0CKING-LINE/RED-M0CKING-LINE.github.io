@@ -1,0 +1,20 @@
+{{define "title"}}{{.Post.Meta.Title}} - {{.SiteName}}{{end}}
+{{define "description"}}{{.Post.Meta.Summary}}{{end}}
+{{define "content"}}
+<article class="post">
+  <header class="post-head">
+    <p class="eyebrow"><a href="/blog"><-- Back to blog</a></p>
+    <h1>{{.Post.Meta.Title}}</h1>
+    <p class="post-meta">
+      <time datetime="{{fmtISO .Post.Meta.Date}}">{{fmtDate .Post.Meta.Date}}</time>
+      {{if .Post.Meta.Author}}· by {{.Post.Meta.Author}}{{end}}
+    </p>
+    {{if .Post.Meta.Tags}}
+      <ul class="tag-list">
+        {{range .Post.Meta.Tags}}<li class="tag">#{{.}}</li>{{end}}
+      </ul>
+    {{end}}
+  </header>
+  <div class="prose">{{.Post.HTML}}</div>
+</article>
+{{end}}

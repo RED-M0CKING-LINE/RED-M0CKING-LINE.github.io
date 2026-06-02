@@ -1,0 +1,26 @@
+{{define "header.html"}}
+<header class="site-header">
+  <div class="container header-row">
+    <a class="brand" href="/" aria-label="{{.SiteName}} home">
+      {{template "logo.html" .}}
+      <span class="brand-name">{{.SiteName}}</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+      <a href="/" {{if eq .Page "home"}}aria-current="page"{{end}}>Home</a>
+      <a href="/blog" {{if eq .Page "blog"}}aria-current="page"{{end}}>Blog</a>
+      <a href="/tools" {{if eq .Page "tools"}}aria-current="page"{{end}}>Tools</a>
+      <a href="/protected" {{if eq .Page "protected"}}aria-current="page"{{end}}>Protected</a>
+      <a href="/about" {{if eq .Page "about"}}aria-current="page"{{end}}>About</a>
+      <button type="button" class="theme-toggle" aria-label="Toggle color theme" data-theme-toggle>
+        <svg class="theme-icon theme-icon-dark" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon theme-icon-light" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+{{end}}
