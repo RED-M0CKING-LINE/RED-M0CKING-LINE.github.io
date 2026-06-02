@@ -1,0 +1,20 @@
+{{define "title"}}Protected - {{.SiteName}}{{end}}
+{{define "content"}}
+<header class="page-head">
+  <h1>Protected page</h1>
+  <p class="page-sub">This page is gated by OIDC. Behavior depends on whether a provider is configured.</p>
+</header>
+
+{{if .DevMode}}
+  <div class="notice notice-warn">
+    <strong>Dev mode:</strong> OIDC is not configured, so this page is open. Set <code>OIDC_ISSUER</code>, <code>OIDC_CLIENT_ID</code>, <code>OIDC_CLIENT_SECRET</code>, and <code>OIDC_REDIRECT_URL</code> to enforce real authentication. See <a href="/about">/about</a> for current status.
+  </div>
+{{else}}
+  <div class="notice notice-ok">
+    Signed in as <strong>{{or .User.Email .User.Sub}}</strong>. Session expires {{fmtDate .User.Expires}}.
+    <form action="/auth/logout" method="post" class="inline-form"><button class="btn btn-ghost" type="submit">Sign out</button></form>
+  </div>
+{{end}}
+
+<h2>There isnt actually anything here yet since this is to be testing</h2>
+{{end}}

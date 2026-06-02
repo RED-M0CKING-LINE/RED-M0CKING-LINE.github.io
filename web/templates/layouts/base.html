@@ -1,0 +1,35 @@
+{{define "base.html"}}<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{block "title" .}}{{.SiteName}}{{end}}</title>
+  <meta name="description" content="{{block "description" .}}{{end}}" />
+  <link rel="icon" type="image/png" href="/static/img/favicon.png" />
+  <link rel="alternate" type="application/atom+xml" title="{{.SiteName}} feed" href="{{.BaseURL}}/feed.xml" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <script>
+    // Inline theme bootstrap: avoid FOUC. Reads system pref and theme override stored in a cookie set by the toggle
+    (function () {
+      try {
+        var m = document.cookie.match(/(?:^|; )theme=([^;]+)/);
+        var t = m ? decodeURIComponent(m[1]) : null;
+        if (!t) {
+          t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  {{template "header.html" .}}
+  <main id="content" class="container">
+    {{block "content" .}}{{end}}
+  </main>
+  {{template "footer.html" .}}
+  <script src="/static/js/app.js" defer></script>
+  {{block "scripts" .}}{{end}}
+</body>
+</html>
+{{end}}
