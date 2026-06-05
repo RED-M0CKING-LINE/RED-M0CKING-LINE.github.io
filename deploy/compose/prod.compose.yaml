@@ -55,4 +55,4 @@ services:
       - nginx
     command: tunnel --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
     volumes:
-      - ./cloudflared.yaml:/etc/cloudflared:ro
+      - ./cloudflared.yaml:/etc/cloudflared/config.yml:ro
