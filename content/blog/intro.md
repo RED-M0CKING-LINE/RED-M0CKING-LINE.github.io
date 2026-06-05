@@ -5,7 +5,7 @@ updated: 2026-06-1
 summary: "This Blog"
 author: "Ethan Ashley"
 tags: ["meta"]
-draft: true
+draft: false
 ---
 
 # I am not sure
