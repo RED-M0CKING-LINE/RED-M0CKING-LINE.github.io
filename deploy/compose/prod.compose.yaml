@@ -48,7 +48,7 @@ services:
       - "80"
       - "443"
   cloudflared:
-    container_name: APP-cloudflared
+    container_name: website-cloudflared
     image: docker.io/cloudflare/cloudflared:latest
     restart: unless-stopped
     depends_on:
