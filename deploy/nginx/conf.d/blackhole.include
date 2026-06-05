@@ -3,8 +3,6 @@
 # Block unused methods
 if ($request_method !~ ^(GET|HEAD|POST)$) { return 405; }
 
-# Block bad bots
-if ($bad_bot) { return 444; }
 
 # 1. Hidden/config directories (.git, .env, IDEs, etc.)
 location ~* (^|/)\.(git|hg|svn|bzr|DS_Store|idea|vscode)(/|$)   { return 444; }
@@ -38,3 +36,12 @@ location ^~ /.well-known/   { return 444; }
 
 # 7. Method guard (optional): block rarely used methods
 if ($request_method !~ ^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$) { return 405; }
+
+
+# Block bad bots from public IPs
+map "$is_private:$bad_bot" $block_request {
+    "0:1"   1;  # Public IP, Bad Bot, Block
+    "1:1"   0;  # Private IP, Bad Bot, Allow
+    default 0;  # Allow
+}
+if ($block_request) { return 444; }
