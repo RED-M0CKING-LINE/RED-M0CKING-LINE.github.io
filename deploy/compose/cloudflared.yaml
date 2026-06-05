@@ -1,0 +1,5 @@
+ingress:
+  - hostname: www.ethanashley.net
+    service: https://nginx:443
+    originRequest:
+      originServerName: www.ethanashley.net
