@@ -51,4 +51,6 @@ services:
     container_name: APP-cloudflared
     image: docker.io/cloudflare/cloudflared:latest
     restart: unless-stopped
+    depends_on:
+      - nginx
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
