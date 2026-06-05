@@ -13,3 +13,5 @@ Add a howto page of how to use the atom feed
 
 # Make the CIDR tool templatable so that more tools can be made
 
+# Harden nginx further
+use dhi.io/nginx
