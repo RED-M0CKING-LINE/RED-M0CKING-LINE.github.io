@@ -44,9 +44,12 @@ services:
       interval: 30s
       timeout: 3s
       retries: 3
-    expose:
-      - "80"
-      - "443"
+    ports:
+      - "80:80"
+      - "443:443"
+    # expose:
+    #   - "80"
+    #   - "443"
   cloudflared:
     container_name: APP-cloudflared
     image: docker.io/cloudflare/cloudflared:latest
