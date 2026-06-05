@@ -49,6 +49,6 @@ services:
       - "443"
   cloudflared:
     container_name: APP-cloudflared
-    image: cloudflare/cloudflared:latest
+    image: docker.io/cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
