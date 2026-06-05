@@ -53,4 +53,7 @@ services:
     restart: unless-stopped
     depends_on:
       - nginx
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
+    command: tunnel --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
+    volumes:
+      - volumes:
+      - ./cloudflared.yaml:/etc/cloudflared:ro
