@@ -1,12 +1,11 @@
-// Tiny, dependency-free JS for the global chrome.
-// - Theme toggle (writes a 1-year cookie, no server roundtrip)
-// - Mobile nav toggle
+// Theme toggle via cookie
+// Mobile nav toggle
 (function () {
   'use strict';
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    // 1-year cookie. SameSite=Lax so it's sent on top-level nav.
+    // SameSite=Lax so its sent on top-level nav
     document.cookie = 'theme=' + encodeURIComponent(theme) + '; path=/; max-age=31536000; SameSite=Lax';
   }
 
@@ -14,6 +13,22 @@
     return document.documentElement.getAttribute('data-theme') || 'dark';
   }
 
+  function getTheme() {
+    const match = document.cookie.match(/(?:^|; )theme=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+  // Set theme when page is loaded
+  document.addEventListener('DOMContentLoaded', function () {
+    const storedTheme = getTheme();
+    if (storedTheme) {
+      setTheme(storedTheme);
+    } else {
+      setTheme(currentTheme());
+    }
+  });
+
+  // Toggle theme
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-theme-toggle]');
     if (t) {
@@ -29,7 +44,7 @@
     }
   });
 
-  // Re-apply theme when the system theme changes AND no explicit choice is set.
+  // Re-apply theme when the system theme changes AND no explicit choice is set
   var mq = window.matchMedia('(prefers-color-scheme: dark)');
   if (mq && mq.addEventListener) {
     mq.addEventListener('change', function (ev) {
