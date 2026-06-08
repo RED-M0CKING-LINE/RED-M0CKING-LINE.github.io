@@ -1,6 +1,7 @@
 ---
 services:
   app:
+    container_name: app
     build:
       context: ../..
       dockerfile: Containerfile
@@ -29,6 +30,7 @@ services:
       - "8080"
 
   nginx:
+    container_name: nginx
     image: docker.io/library/nginx:stable-alpine
     restart: unless-stopped
     depends_on:

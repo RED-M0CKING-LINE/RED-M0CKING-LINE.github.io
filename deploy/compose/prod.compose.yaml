@@ -1,6 +1,7 @@
 ---
 services:
   app:
+    container_name: app
     build:
       context: ../..
       dockerfile: Containerfile
@@ -29,6 +30,7 @@ services:
       - "8080"
 
   nginx:
+    container_name: nginx
     image: docker.io/library/nginx:stable-alpine # Switch to dhi.io/nginx eventually
     restart: unless-stopped
     depends_on:
@@ -44,15 +46,20 @@ services:
       interval: 30s
       timeout: 3s
       retries: 3
+    ports:
+      - "80:80"
+      - "443:443"
     expose:
       - "80"
       - "443"
+
   cloudflared:
     container_name: website-cloudflared
     image: docker.io/cloudflare/cloudflared:latest
     restart: unless-stopped
     depends_on:
       - nginx
-    command: tunnel --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
+    command: tunnel --loglevel debug --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
     volumes:
       - ./cloudflared.yaml:/etc/cloudflared/config.yml:ro
+

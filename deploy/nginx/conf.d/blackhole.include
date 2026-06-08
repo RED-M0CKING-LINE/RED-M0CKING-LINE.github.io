@@ -37,11 +37,5 @@ location ^~ /.well-known/   { return 444; }
 # 7. Method guard (optional): block rarely used methods
 if ($request_method !~ ^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$) { return 405; }
 
-
-# Block bad bots from public IPs
-map "$is_private:$bad_bot" $block_request {
-    "0:1"   1;  # Public IP, Bad Bot, Block
-    "1:1"   0;  # Private IP, Bad Bot, Allow
-    default 0;  # Allow
-}
+# Block requests based on map
 if ($block_request) { return 444; }

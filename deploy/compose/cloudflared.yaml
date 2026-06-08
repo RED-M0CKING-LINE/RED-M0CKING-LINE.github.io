@@ -3,3 +3,9 @@ ingress:
     service: https://nginx:443
     originRequest:
       originServerName: www.ethanashley.net
+  - hostname: raw.www.ethanashley.net
+    service: http://app:8080
+    originRequest:
+      originServerName: www.ethanashley.net
+  
+  - service: http_status:404
