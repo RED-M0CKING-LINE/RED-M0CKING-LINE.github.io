@@ -52,3 +52,14 @@ services:
     expose:
       - "80"
       - "443"
+
+  cloudflared:
+    container_name: website-cloudflared
+    image: docker.io/cloudflare/cloudflared:latest
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    command: tunnel --loglevel debug --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
+    volumes:
+      - ./cloudflared.yaml:/etc/cloudflared/config.yml:ro
+
