@@ -61,5 +61,5 @@ services:
       - nginx
     command: tunnel --loglevel debug --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
     volumes:
-      - ./cloudflared.yaml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared.yaml:/etc/cloudflared/config.yml:ro,Z
 
