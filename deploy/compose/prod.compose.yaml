@@ -1,7 +1,7 @@
 ---
 services:
   app:
-    container_name: app
+    container_name: website-app
     build:
       context: ../..
       dockerfile: Containerfile
@@ -48,7 +48,8 @@ services:
       retries: 3
     ports:
       - "80:80"
-      - "443:443"
+      - "443:443/tcp"
+      - "443:443/udp"
     expose:
       - "80"
       - "443"

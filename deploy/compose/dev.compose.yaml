@@ -1,7 +1,7 @@
 ---
 services:
   app:
-    container_name: app
+    container_name: website-app
     build:
       context: ../..
       dockerfile: Containerfile
