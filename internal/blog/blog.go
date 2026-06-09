@@ -4,6 +4,7 @@ package blog
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"html/template"
 	"os"
@@ -61,21 +62,6 @@ func (s *Store) Load(dir string, includeDrafts bool) error {
 		return fmt.Errorf("read blog dir: %w", err)
 	}
 
-	md := goldmark.New(
-		goldmark.WithExtensions(
-			extension.GFM,
-			extension.Footnote,
-			extension.Typographer,
-		),
-		goldmark.WithParserOptions(parser.WithAutoHeadingID()),
-		goldmark.WithRendererOptions(html.WithHardWraps(), html.WithXHTML()),
-	)
-
-	// Strict sanitizer: allow Markdown, block scripts/iframes/etc
-	policy := bluemonday.UGCPolicy()
-	policy.AllowAttrs("class").OnElements("code", "pre", "span", "div")
-	policy.AllowAttrs("id").OnElements("h1", "h2", "h3", "h4", "h5", "h6")
-
 	posts := make([]*Post, 0, len(entries))
 	bySlug := make(map[string]*Post, len(entries))
 
@@ -98,11 +84,10 @@ func (s *Store) Load(dir string, includeDrafts bool) error {
 			continue
 		}
 
-		var buf bytes.Buffer
-		if err := md.Convert(body, &buf); err != nil {
-			return fmt.Errorf("render %s: %w", path, err)
+		clean, err := postRawToHTML(body)
+		if err != nil {
+			fmt.Errorf("render %s: %w", path, err)
 		}
-		clean := policy.SanitizeBytes(buf.Bytes())
 
 		slug := strings.TrimSuffix(e.Name(), ".md")
 		p := &Post{
@@ -182,4 +167,56 @@ func parseFrontMatter(raw []byte) (FrontMatter, []byte, error) {
 		return fm, raw, err
 	}
 	return fm, []byte(body), nil
+}
+
+// Converts a raw markdown post to an HTML formatted post
+func postRawToHTML(raw []byte, ) (template.HTML,error) {
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+			extension.Footnote,
+			extension.Typographer,
+		),
+		goldmark.WithParserOptions(parser.WithAutoHeadingID()),
+		goldmark.WithRendererOptions(html.WithHardWraps(), html.WithXHTML()),
+	)
+	// Strict sanitizing: allow Markdown, block scripts/iframes/etc
+	policy := bluemonday.UGCPolicy()
+	policy.AllowAttrs("class").OnElements("code", "pre", "span", "div")
+	policy.AllowAttrs("id").OnElements("h1", "h2", "h3", "h4", "h5", "h6")
+
+	var buf bytes.Buffer
+	if err := md.Convert(raw, &buf); err != nil {
+		return "", errors.New("error rendering HTML")
+	}
+	clean := policy.SanitizeBytes(buf.Bytes())
+	return template.HTML(clean), nil
+}
+
+// Truncate the post content string based on line OR character count, and append a string when truncation has occured
+func truncatePostContent(p *Post, truncatedAppend string, limitChars uint, limitLines uint) (*Post, error) {
+	if (limitChars == 0 && limitLines == 0) || (limitChars != 0 && limitLines != 0) {
+		return nil, errors.New("limitChars xor limitLines must be non zero")
+	}
+
+	if limitChars != 0 {
+		runes := []rune(p.Raw)
+		if uint(len(runes)) > limitChars {
+			p.Raw = string(runes[:limitChars]) + truncatedAppend
+		}
+	}
+
+	if limitLines != 0 {
+		lines := strings.Split(p.Raw, "\n")
+		if uint(len(lines)) > limitLines {
+			p.Raw = strings.Join(lines[:limitLines], "\n") + truncatedAppend
+		}
+	}
+	clean, err := postRawToHTML([]byte(p.Raw))
+	if err != nil {
+		errors.New("error converting new raw to html")
+	}
+	p.HTML = clean
+
+	return p, nil
 }

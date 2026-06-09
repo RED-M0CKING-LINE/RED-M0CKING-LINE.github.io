@@ -98,13 +98,18 @@ func (s *Store) AtomFeed(opt FeedOptions) ([]byte, error) {
 			Updated:   rfc3339OrEmpty(upd),
 			Summary:   p.Meta.Summary,
 		}
+
 		if p.Meta.Author != "" {
 			e.Author = &atomAuthor{Name: p.Meta.Author}
 		}
 		for _, t := range p.Meta.Tags {
 			e.Categories = append(e.Categories, atomCategory{Term: t})
 		}
-		e.Content = atomContent{Type: "html", Body: string(p.HTML)}
+		truncatedPostContent, err := truncatePostContent(p, "...\nContent truncated. Continue reading on the website.", 3000, 0)
+		if err != nil {
+			return nil, err
+		}
+		e.Content = atomContent{Type: "html", Body: string(truncatedPostContent.HTML)}
 		feed.Entries = append(feed.Entries, e)
 	}
 
@@ -121,7 +126,6 @@ func (s *Store) AtomFeed(opt FeedOptions) ([]byte, error) {
 	return []byte(buf.String()), nil
 }
 
-// func truncateContent(content string, limitChar , limitLines ) string
 
 func rfc3339OrEmpty(t time.Time) string {
 	if t.IsZero() {

@@ -16,5 +16,3 @@ https://knowledge.digicert.com/tutorials/enabling-perfect-forward-secrecy
 
 # Get Cloudflared Working
 
-# Truncate posts at a character limit so the atom feed isnt massive
-
