@@ -107,8 +107,8 @@
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --content-w: 72ch;
-  --container-w: 1100px;
+  --content-w: 70vw;
+  --container-w: 80vw;
   --shadow-1: 0 1px 0 rgba(0,0,0,0.06);
   --shadow-2: 0 4px 16px rgba(0,0,0,0.18);
   --dur-fast: 120ms;
