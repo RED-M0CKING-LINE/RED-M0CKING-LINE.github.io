@@ -1,0 +1,4 @@
+Contact: mailto:security@ethanashley.net
+Encryption: https://mail-api.proton.me/pks/lookup?op=get&search=ethan@ethanashley.net
+Expires: 2055-01-01T00:00:00Z
+Preferred-Languages: en

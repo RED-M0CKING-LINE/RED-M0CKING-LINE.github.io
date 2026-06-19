@@ -84,6 +84,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 	mux.HandleFunc("GET /feed.xml", pages.Feed)
 	mux.HandleFunc("GET /atom.xml", pages.Feed)
 	mux.HandleFunc("GET /robots.txt", pages.Robots)
+	mux.HandleFunc("GET /security.txt", pages.Security)
 	mux.HandleFunc("GET /sitemap.xml", pages.Sitemap)
 
 	// OIDC

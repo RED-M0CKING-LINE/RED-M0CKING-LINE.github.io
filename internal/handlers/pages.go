@@ -56,10 +56,8 @@ func (p *Pages) Home(w http.ResponseWriter, r *http.Request) {
 
 func (p *Pages) About(w http.ResponseWriter, r *http.Request) {
 	_ = p.Tpl.Render(w, "about", p.base(r, "about", map[string]any{
-		"Uptime":    time.Since(p.Start).Round(time.Second).String(),
-		"GoVersion": runtime.Version(),
-		"NumGorout": runtime.NumGoroutine(),
-		"NumCPU":    runtime.NumCPU(),
+		"Uptime": time.Since(p.Start).Round(time.Second).String(),
+		"NumCPU": runtime.NumCPU(),
 	}))
 }
 
@@ -119,11 +117,17 @@ func (p *Pages) Feed(w http.ResponseWriter, r *http.Request) {
 	w.Write(xml)
 }
 
-// Robots and Sitemap are intentionally minimal
+// Robots and Security and Sitemap
 // Nginx also serves these
 func (p *Pages) Robots(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
-	w.Write([]byte("User-agent: *\nDisallow: /protected\nDisallow: /auth/\nSitemap: " + p.Cfg.BaseURL + "/sitemap.xml\n"))
+	// w.Write([]byte("User-agent: *\nDisallow: /protected\nDisallow: /auth/\nSitemap: " + p.Cfg.BaseURL + "/sitemap.xml\n"))
+	http.ServeFile(w, r, p.Cfg.StaticDir+"/txt/robots.txt")
+}
+
+func (p *Pages) Security(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	http.ServeFile(w, r, p.Cfg.StaticDir+"/txt/security.txt")
 }
 
 func (p *Pages) Sitemap(w http.ResponseWriter, r *http.Request) {
