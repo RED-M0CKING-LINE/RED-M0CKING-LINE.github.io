@@ -1,0 +1,52 @@
+/* Blog specific CSS (added because im adding dependancies) */
+
+
+
+
+/* Blog post */
+.post { max-width: var(--content-w); margin: 0 auto; }
+.post-head { padding-bottom: var(--space-6); border-bottom: 1px solid var(--border); margin-bottom: var(--space-8); }
+.post-meta { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.85rem; margin: var(--space-2) 0 0; }
+.prose { font-size: 1.02rem; }
+.prose h2 { margin-top: var(--space-8); font-size: 1.4rem; }
+.prose h3 { margin-top: var(--space-6); }
+.prose ul, .prose ol { padding-left: 1.2rem; }
+.prose blockquote { border-left: 3px solid var(--accent); padding-left: var(--space-4); margin: var(--space-6) 0; color: var(--text-dim); font-style: italic; }
+.prose table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; }
+.prose th, .prose td { border: 1px solid var(--border); padding: var(--space-2) var(--space-3); text-align: left; }
+.prose th { background: var(--surface-2); }
+
+/* Override callout look */
+summary.callout-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    list-style: none;
+}
+
+summary.callout-title::-webkit-details-marker {
+    display: none;
+}
+
+summary.callout-title::before {
+    content: "▶";
+    font-size: 0.7em;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+details[open] > summary.callout-title::before {
+    transform: rotate(90deg);
+}
+
+summary.callout-title p.callout-title-text {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    align-self: center;
+}
+
+summary.callout-title svg {
+    flex-shrink: 0;
+    display: block;
+}

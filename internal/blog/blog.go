@@ -19,6 +19,8 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
+	alertcallouts "github.com/zmtcreative/gm-alert-callouts"
+	"go.abhg.dev/goldmark/wikilink"
 	"gopkg.in/yaml.v3"
 )
 
@@ -53,6 +55,9 @@ type Store struct {
 func New() *Store {
 	return &Store{bySlug: map[string]*Post{}}
 }
+
+// Resolved WikiLinks
+type resolvedWikilink struct{}
 
 // Load scans dir for *.md files, parses front matter, renders HTML, and populates the store
 // Drafts are skipped unless includeDrafts is true
@@ -145,6 +150,20 @@ func (s *Store) LatestUpdate() time.Time {
 	return t
 }
 
+// Resolve WikiLinks to static blog content
+func (r resolvedWikilink) ResolveWikilink(n *wikilink.Node) ([]byte, error) {
+	target := string(n.Target)
+	if n.Embed {
+		// ![[attachments/foo.png]]
+		return []byte("/static/assets/blog/" + target), nil
+	}
+	// [[Some Page]]
+	if !strings.Contains(target, ".") {
+		target += ".html"
+	}
+	return []byte("/static/assets/blog/" + target), nil
+}
+
 // Splits a YAML front matter block (---) from the markdown body. Both parts might be empty
 func parseFrontMatter(raw []byte) (FrontMatter, []byte, error) {
 	var fm FrontMatter
@@ -170,20 +189,42 @@ func parseFrontMatter(raw []byte) (FrontMatter, []byte, error) {
 }
 
 // Converts a raw markdown post to an HTML formatted post
-func postRawToHTML(raw []byte, ) (template.HTML,error) {
+func postRawToHTML(raw []byte) (template.HTML, error) {
 	md := goldmark.New(
 		goldmark.WithExtensions(
 			extension.GFM,
 			extension.Footnote,
 			extension.Typographer,
+			&wikilink.Extender{Resolver: resolvedWikilink{}},
+			alertcallouts.NewAlertCallouts(
+				alertcallouts.UseObsidianIcons(),
+				alertcallouts.WithFolding(true),
+				alertcallouts.WithCustomAlerts(true),
+			),
 		),
 		goldmark.WithParserOptions(parser.WithAutoHeadingID()),
 		goldmark.WithRendererOptions(html.WithHardWraps(), html.WithXHTML()),
 	)
 	// Strict sanitizing: allow Markdown, block scripts/iframes/etc
 	policy := bluemonday.UGCPolicy()
+	// Normal markdown formatting
 	policy.AllowAttrs("class").OnElements("code", "pre", "span", "div")
 	policy.AllowAttrs("id").OnElements("h1", "h2", "h3", "h4", "h5", "h6")
+	// Wiki links and embedding images
+	policy.AllowElements("img")
+	policy.AllowAttrs("src", "alt").OnElements("img")
+	// Callouts
+	policy.AllowElements("details", "summary")
+	policy.AllowAttrs("open").OnElements("details")
+	policy.AllowAttrs("class", "data-callout").OnElements("details")
+	policy.AllowAttrs("class", "data-callout").OnElements("div")
+	// SVG icons emitted by gm-alert-callouts inside callout summary only
+	policy.AllowElements("svg", "path", "g", "use", "defs", "symbol", "circle", "rect", "line", "polyline", "polygon")
+	policy.AllowAttrs("xmlns", "viewBox", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin", "width", "height",
+		"d", "cx", "cy", "r", "x", "y", "x1", "y1", "x2", "y2", "points", "transform", "aria-hidden").OnElements(
+		"svg", "path", "g", "circle", "rect", "line", "polyline", "polygon")
+	policy.AllowAttrs("class").OnElements(
+		"svg", "path", "g", "circle", "rect", "line", "polyline", "polygon", "summary")
 
 	var buf bytes.Buffer
 	if err := md.Convert(raw, &buf); err != nil {

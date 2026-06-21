@@ -11,8 +11,16 @@ require (
 )
 
 require (
-	github.com/aymerick/douceur v0.2.0
-	github.com/go-jose/go-jose/v4 v4.1.4
-	github.com/gorilla/css v1.0.1
-	golang.org/x/net v0.26.0
+	github.com/zmtcreative/gm-alert-callouts v0.8.0
+	go.abhg.dev/goldmark/wikilink v0.6.0
+)
+
+require (
+	github.com/aymerick/douceur v0.2.0 // indirect
+	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
+	github.com/gorilla/css v1.0.1 // indirect
+	github.com/jeandeaual/go-locale v0.0.0-20250612000132-0ef82f21eade // indirect
+	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
 )

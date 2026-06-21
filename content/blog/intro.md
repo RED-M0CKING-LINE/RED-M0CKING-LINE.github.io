@@ -1,6 +1,7 @@
 ---
 title: "This Blog"
 date: 2026-05-18
+created: 2026-05-18
 updated: 2026-06-1
 summary: "This Blog"
 author: "Ethan Ashley"
