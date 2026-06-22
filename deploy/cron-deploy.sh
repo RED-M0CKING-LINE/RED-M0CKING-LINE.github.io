@@ -5,6 +5,8 @@ set -euo pipefail
 #PROJECT_ROOT=/home/local-admin/ethanashley-net-website-main-go
 #*/10 * * * * systemd-cat -t personal-website-main-go-deploy ${WEB_PROJECT_ROOT}/deploy/cron-deploy.sh
 
+# Check logs with: journalctl -t personal-website-main-go-deploy -f
+
 : "${WEB_PROJECT_ROOT:?WEB_PROJECT_ROOT must be set}"
 COMPOSE_FILE="${PROJECT_ROOT}/deploy/compose/prod.compose.yaml"
 BRANCH="prod"
