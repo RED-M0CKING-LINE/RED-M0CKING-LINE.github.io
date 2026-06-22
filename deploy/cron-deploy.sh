@@ -27,12 +27,12 @@ echo "New commits detected: ${LOCAL:0:8} -> ${REMOTE:0:8}"
 git pull origin "${BRANCH}"
 
 echo "Building new stack..."
-podman compose -f "${COMPOSE_FILE}" build
+podman-compose -f "${COMPOSE_FILE}" build
 
 echo "Bringing stack down..."
-podman compose -f "${COMPOSE_FILE}" down
+podman-compose -f "${COMPOSE_FILE}" down
 
 echo "Starting stack..."
-podman compose -f "${COMPOSE_FILE}" up -d
+podman-compose -f "${COMPOSE_FILE}" up -d
 
 echo "Deploy complete!"
