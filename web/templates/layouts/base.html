@@ -9,19 +9,7 @@
   <link rel="alternate" type="application/atom+xml" title="{{.SiteName}} feed" href="{{.BaseURL}}/feed.xml" />
   <link rel="stylesheet" href="/static/css/main.css" />
   {{block "head" .}}{{end}}
-  <script>
-    // Inline theme bootstrap: avoid FOUC. Reads system pref and theme override stored in a cookie set by the toggle
-    (function () {
-      try {
-        var m = document.cookie.match(/(?:^|; )theme=([^;]+)/);
-        var t = m ? decodeURIComponent(m[1]) : null;
-        if (!t) {
-          t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        }
-        document.documentElement.setAttribute('data-theme', t);
-      } catch (e) {}
-    })();
-  </script>
+  <script src="/static/js/theme.js"></script>
 </head>
 <body>
   {{template "header.html" .}}

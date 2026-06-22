@@ -67,6 +67,8 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 		Start: time.Now(),
 	}
 
+	// mime.AddExtensionType(".icons", "text/plain")
+
 	mux := http.NewServeMux()
 	// Static assets: served directly
 	fileServer := http.FileServer(http.Dir(cfg.StaticDir))
