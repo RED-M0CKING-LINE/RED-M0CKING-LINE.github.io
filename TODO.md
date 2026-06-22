@@ -1,7 +1,5 @@
 
 # Appearance
-## Apply the theming sooner
-when clicking through pages on a remote server, there is a flashing when lightmode is selected
 ## Add more accent colors
 make headers and accent colors alternate, following that of obsidian or vscode
 
@@ -32,7 +30,7 @@ https://knowledge.digicert.com/tutorials/enabling-perfect-forward-secrecy
 ## Get Cloudflared Working
 ## Make proper Dev and Prod deployments
 ## Update website via github
-it pulls from the prod branch automagically
+~~it pulls from the prod branch automagically~~
 use CI/CD
 build website container in github if free
 setup rollbacks on for webserver

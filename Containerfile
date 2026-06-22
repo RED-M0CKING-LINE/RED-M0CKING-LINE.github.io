@@ -8,6 +8,8 @@ WORKDIR /src
 # Cache modules independently of source
 COPY go.mod go.sum ./
 RUN go mod download
+# For minifying sources at build time
+RUN go install github.com/tdewolff/minify/v2/cmd/minify@latest
 
 COPY . .
 
@@ -15,7 +17,7 @@ COPY . .
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 RUN go build -trimpath -ldflags="-s -w -buildid=" -o /out/server ./cmd/server
 
-# WASM tool + matching wasm_exec.js from the Go toolchain.
+# WASM tool and wasm_exec.js from the Go toolchain.
 RUN GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" \
         -o /src/web/static/wasm/tool.wasm ./wasm/tool && \
     cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" /src/web/static/wasm/wasm_exec.js
@@ -23,15 +25,22 @@ RUN GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" \
 # layout
 RUN mkdir -p /out/web /out/content && \
     cp -r web/templates /out/web/templates && \
-    cp -r web/static    /out/web/static && \
-    cp -r content/blog  /out/content/blog
+    cp -r web/static /out/web/static && \
+    cp -r content/blog /out/content/blog
+
+# minify
+RUN minify -r \
+    --match='\.css$|\.js$|\.svg$|\.html$' \
+    --exclude='^/wasm/' \
+    -o /out/web/static \
+    /out/web/static
 
 # runtime
 FROM gcr.io/distroless/static-debian12:nonroot AS runtime
 
 WORKDIR /app
-COPY --from=builder --chown=nonroot:nonroot /out/server  /app/server
-COPY --from=builder --chown=nonroot:nonroot /out/web     /app/web
+COPY --from=builder --chown=nonroot:nonroot /out/server /app/server
+COPY --from=builder --chown=nonroot:nonroot /out/web /app/web
 COPY --from=builder --chown=nonroot:nonroot /out/content /app/content
 
 USER nonroot:nonroot
