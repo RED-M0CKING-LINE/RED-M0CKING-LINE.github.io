@@ -109,7 +109,7 @@ func SecureHeaders(opts SecureHeadersOptions) func(http.Handler) http.Handler {
 		csp = "default-src 'self'" +
 			"; img-src 'self' data:" +
 			"; style-src 'self'" +
-			"; script-src 'self' 'wasm-unsafe-eval' /cdn-cgi/" +
+			"; script-src 'self' 'wasm-unsafe-eval' /cdn-cgi/scripts/" +
 			// "; script-src 'self'" + //TESTING CSP
 			"; font-src 'self'" +
 			"; connect-src 'self'" +
