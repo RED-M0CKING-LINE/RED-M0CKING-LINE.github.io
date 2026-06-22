@@ -102,12 +102,15 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 	mux.HandleFunc("GET /healthz", pages.Healthz)
 	mux.HandleFunc("GET /readyz", pages.Readyz)
 
+	minifier := middleware.NewMinifier()
+
 	handler := middleware.Chain(mux,
 		middleware.RequestID,
 		middleware.Recover(logger),
 		middleware.Logger(logger),
 		middleware.SecureHeaders(middleware.SecureHeadersOptions{BaseURL: cfg.BaseURL, CSPReportToURI: cfg.CSPReportToURI, HSTS: cfg.IsProd()}),
 		middleware.NoIndex("/protected", "/auth/"),
+		middleware.Minifier(minifier),
 	)
 
 	srv := &http.Server{

@@ -41,6 +41,7 @@ func (p *Pages) base(r *http.Request, page string, extra map[string]any) map[str
 }
 
 func (p *Pages) Home(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if r.URL.Path != "/" {
 		p.NotFound(w, r)
 		return
@@ -55,6 +56,7 @@ func (p *Pages) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Pages) About(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_ = p.Tpl.Render(w, "about", p.base(r, "about", map[string]any{
 		"Uptime": time.Since(p.Start).Round(time.Second).String(),
 		"NumCPU": runtime.NumCPU(),
@@ -62,12 +64,14 @@ func (p *Pages) About(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Pages) BlogIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_ = p.Tpl.Render(w, "blog_index", p.base(r, "blog", map[string]any{
 		"Posts": p.Blog.All(),
 	}))
 }
 
 func (p *Pages) BlogPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	slug := r.PathValue("slug")
 	post := p.Blog.Get(slug)
 	if post == nil {
@@ -80,10 +84,12 @@ func (p *Pages) BlogPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Pages) Tools(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_ = p.Tpl.Render(w, "tools", p.base(r, "tools", nil))
 }
 
 func (p *Pages) Protected(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	sess, _ := p.Auth.SessionFrom(r)
 	_ = p.Tpl.Render(w, "protected", p.base(r, "protected", map[string]any{
 		"DevMode": !p.Auth.Enabled(),
@@ -145,6 +151,7 @@ func (p *Pages) Sitemap(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Pages) NotFound(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusNotFound)
 	_ = p.Tpl.Render(w, "404", p.base(r, "404", nil))
 }
