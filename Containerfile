@@ -5,11 +5,15 @@ FROM docker.io/library/golang:${GO_VERSION}-alpine AS builder
 
 WORKDIR /src
 
-# Cache modules independently of source
-COPY go.mod go.sum ./
-RUN go mod download
+
 # For minifying sources at build time
 RUN go install github.com/tdewolff/minify/v2/cmd/minify@latest
+
+# Install modules
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Caching ends here
 
 COPY . .
 
