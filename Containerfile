@@ -1,30 +1,38 @@
 # podman first, docker later
+# This uses aggressive caching and requires Buildkit to be enabled/supported
 
 ARG GO_VERSION=1.25
 FROM docker.io/library/golang:${GO_VERSION}-alpine AS builder
 
 WORKDIR /src
 
-
 # For minifying sources at build time
-RUN go install github.com/tdewolff/minify/v2/cmd/minify@latest
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    go install github.com/tdewolff/minify/v2/cmd/minify@v2.24.13
+
 
 # Install modules
 COPY go.mod go.sum ./
-RUN go mod download
-
-# Caching ends here
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
 
 COPY . .
 
-# Static server binary
-ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-RUN go build -trimpath -ldflags="-s -w -buildid=" -o /out/server ./cmd/server
-
 # WASM tool and wasm_exec.js from the Go toolchain.
-RUN GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" \
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w -buildid=" \
         -o /src/web/static/wasm/tool.wasm ./wasm/tool && \
     cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" /src/web/static/wasm/wasm_exec.js
+
+# Static server binary
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    go build -trimpath -ldflags="-s -w -buildid=" -o /out/server ./cmd/server
+
+
 
 # layout
 RUN mkdir -p /out/web /out/content && \

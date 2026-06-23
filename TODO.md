@@ -34,6 +34,9 @@ https://knowledge.digicert.com/tutorials/enabling-perfect-forward-secrecy
 use CI/CD
 build website container in github if free
 setup rollbacks on for webserver
+## Make a third custom image for the builder that gets cached for a long time
+it is super slow since adding the minifier and has to download a lot. much of this can be avoided
+this has been made significantly better due to buildkit caching but could be improved further
 
 # Other
 ## Go through useful resources channel in server and make posts about that stuff
