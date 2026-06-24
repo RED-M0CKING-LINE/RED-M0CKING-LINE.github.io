@@ -235,9 +235,9 @@ func postRawToHTML(raw []byte) (template.HTML, error) {
 }
 
 // Truncate the post content string based on line OR character count, and append a string when truncation has occured
-func truncatePostContent(p *Post, truncatedAppend string, limitChars uint, limitLines uint) (*Post, error) {
+func truncatePostContent(p Post, truncatedAppend string, limitChars uint, limitLines uint) (Post, error) {
 	if (limitChars == 0 && limitLines == 0) || (limitChars != 0 && limitLines != 0) {
-		return nil, errors.New("limitChars xor limitLines must be non zero")
+		return p, errors.New("limitChars xor limitLines must be non zero")
 	}
 
 	if limitChars != 0 {

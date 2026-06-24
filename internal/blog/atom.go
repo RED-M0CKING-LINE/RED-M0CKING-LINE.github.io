@@ -105,7 +105,7 @@ func (s *Store) AtomFeed(opt FeedOptions) ([]byte, error) {
 		for _, t := range p.Meta.Tags {
 			e.Categories = append(e.Categories, atomCategory{Term: t})
 		}
-		truncatedPostContent, err := truncatePostContent(p, "...\nContent truncated. Continue reading on the website.", 3000, 0)
+		truncatedPostContent, err := truncatePostContent(*p, "...\nContent truncated. Continue reading on the website.", 3000, 0)
 		if err != nil {
 			return nil, err
 		}
@@ -125,7 +125,6 @@ func (s *Store) AtomFeed(opt FeedOptions) ([]byte, error) {
 	}
 	return []byte(buf.String()), nil
 }
-
 
 func rfc3339OrEmpty(t time.Time) string {
 	if t.IsZero() {
