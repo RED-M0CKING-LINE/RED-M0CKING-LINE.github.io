@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{block "title" .}}{{.SiteName}}{{end}}</title>
   <meta name="description" content="{{block "description" .}}{{end}}" />
-  <link rel="stylesheet" href="/static/css/main.css" />
-  <script data-cfasync="false" src="/static/js/theme.js"></script>
-  <link rel="icon" type="image/png" href="/static/img/favicon.png" />
+  <link rel="stylesheet" href="{{ assetURL "/static/css/main.css"}}" />
+  <script data-cfasync="false" src="{{ assetURL "/static/js/theme.js"}}"></script>
+  <link rel="icon" type="image/png" href="{{ assetURL "/static/img/favicon.png"}}" />
   <link rel="alternate" type="application/atom+xml" title="{{.SiteName}} feed" href="{{.BaseURL}}/atom.xml" />
   {{block "head" .}}{{end}}
 </head>
@@ -17,7 +17,7 @@
     {{block "content" .}}{{end}}
   </main>
   {{template "footer.html" .}}
-  <script src="/static/js/app.js" defer></script>
+  <script src="{{ assetURL "/static/js/app.js"}}" defer></script>
   {{block "scripts" .}}{{end}}
 </body>
 </html>

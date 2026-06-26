@@ -3,8 +3,8 @@
   <div class="container footer-row">
     <p class="copy">© {{.Year}} {{.SiteName}}</p>
     <ul class="footer-links">
-      <li><a href="/robots.txt"></a></li>
-      <li><a href="/security.txt">Security</a></li>
+      <li><a href="{{ assetURL "/robots.txt"}}"></a></li>
+      <li><a href="{{ assetURL "/security.txt"}}">Security</a></li>
       <li><a href="/sitemap.xml">Sitemap</a></li>
       <li><a href="/healthz">Status</a></li>
       <li><a href="/atom.xml" rel="alternate" type="application/atom+xml">Feed{{template "rss-icon.html" .}}</a></li>
