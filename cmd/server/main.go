@@ -38,8 +38,17 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
+	// Static asset cache busting
+	if err := middleware.InitAssetDirHashes(cfg.StaticDir, "/static"); err != nil {
+		logger.Error("asset hashing failed", "err", err)
+		return err
+	}
+
 	// Templates
-	tpl, err := templates.New(templates.Options{Dir: cfg.TemplateDir})
+	tpl, err := templates.New(templates.Options{
+		Dir:     cfg.TemplateDir,
+		FuncMap: middleware.AssetURLFuncMap(),
+	})
 	if err != nil {
 		return err
 	}

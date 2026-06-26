@@ -25,7 +25,8 @@ type Options struct {
 	// root templates directory containing layouts/, pages/, partials/
 	Dir string
 	// merged with the built-in function map
-	Funcs template.FuncMap
+	// Funcs template.FuncMap
+	FuncMap template.FuncMap
 	// base layout filename relative to Dir
 	Layout string
 }
@@ -42,7 +43,7 @@ func New(opts Options) (*Engine, error) {
 	}
 
 	funcs := defaultFuncs()
-	for k, v := range opts.Funcs {
+	for k, v := range opts.FuncMap {
 		funcs[k] = v
 	}
 
