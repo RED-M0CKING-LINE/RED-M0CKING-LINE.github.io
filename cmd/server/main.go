@@ -39,7 +39,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 	defer cancel()
 
 	// Static asset cache busting
-	if err := middleware.InitAssetDirHashes(cfg.StaticDir, "/static"); err != nil {
+	if err := templates.InitAssetDirHashes(cfg.StaticDir, "/static"); err != nil {
 		logger.Error("asset hashing failed", "err", err)
 		return err
 	}
@@ -47,7 +47,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 	// Templates
 	tpl, err := templates.New(templates.Options{
 		Dir:     cfg.TemplateDir,
-		FuncMap: middleware.AssetURLFuncMap(),
+		FuncMap: templates.AssetURLFuncMap(),
 	})
 	if err != nil {
 		return err

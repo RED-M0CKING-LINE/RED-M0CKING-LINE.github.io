@@ -1,4 +1,4 @@
-package middleware
+package templates
 
 import (
 	"encoding/base64"
