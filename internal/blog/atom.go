@@ -2,6 +2,7 @@ package blog
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -105,7 +106,7 @@ func (s *Store) AtomFeed(opt FeedOptions) ([]byte, error) {
 		for _, t := range p.Meta.Tags {
 			e.Categories = append(e.Categories, atomCategory{Term: t})
 		}
-		truncatedPostContent, err := truncatePostContent(*p, "...\nContent truncated. Continue reading on the website.", 3000, 0)
+		truncatedPostContent, err := truncatePostContent(p, "...\nContent truncated. Continue reading on the website.", 3000, 0)
 		if err != nil {
 			return nil, err
 		}
@@ -137,3 +138,48 @@ func rfc3339OrEmpty(t time.Time) string {
 type strBuilderWriter struct{ b *strings.Builder }
 
 func (w *strBuilderWriter) Write(p []byte) (int, error) { return w.b.Write(p) }
+
+// LatestUpdate returns the most recent post date in the store, or time.Time{} when empty. Used as Atom <updated>
+func (s *Store) LatestUpdate() time.Time {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	var t time.Time
+	for _, p := range s.posts {
+		d := p.Meta.Updated
+		if d.IsZero() {
+			d = p.Meta.Date
+		}
+		if d.After(t) {
+			t = d
+		}
+	}
+	return t
+}
+
+// Truncate the post content string based on line OR character count, and append a string when truncation has occured
+func truncatePostContent(p *Post, truncatedAppend string, limitChars uint, limitLines uint) (*Post, error) {
+	if (limitChars == 0 && limitLines == 0) || (limitChars != 0 && limitLines != 0) {
+		return nil, errors.New("limitChars xor limitLines must be non zero")
+	}
+
+	if limitChars != 0 {
+		runes := []rune(p.Raw)
+		if uint(len(runes)) > limitChars {
+			p.Raw = string(runes[:limitChars]) + truncatedAppend
+		}
+	}
+
+	if limitLines != 0 {
+		lines := strings.Split(p.Raw, "\n")
+		if uint(len(lines)) > limitLines {
+			p.Raw = strings.Join(lines[:limitLines], "\n") + truncatedAppend
+		}
+	}
+	clean, err := postRawToHTML([]byte(p.Raw))
+	if err != nil {
+		errors.New("error converting new raw to html")
+	}
+	p.HTML = clean
+
+	return p, nil
+}

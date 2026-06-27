@@ -17,6 +17,7 @@ type Pages struct {
 	Cfg   *config.Config
 	Tpl   *templates.Engine
 	Blog  *blog.Store
+	Atom  *blog.Store // atom feed data stored seperatly
 	Auth  *Auth
 	Log   *slog.Logger
 	Start time.Time
@@ -109,7 +110,7 @@ func (p *Pages) Readyz(w http.ResponseWriter, r *http.Request) {
 
 // Serves an Atom feed of all blog posts
 func (p *Pages) Feed(w http.ResponseWriter, r *http.Request) {
-	xml, err := p.Blog.AtomFeed(blog.FeedOptions{
+	xml, err := p.Atom.AtomFeed(blog.FeedOptions{
 		SiteName: p.Cfg.SiteName,
 		BaseURL:  p.Cfg.BaseURL,
 	})
