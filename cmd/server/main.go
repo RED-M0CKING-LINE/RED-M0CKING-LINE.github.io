@@ -59,6 +59,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 		return err
 	}
 	logger.Info("blog loaded", "posts", len(blogStore.All()))
+	atomStore := blogStore.Clone()
 
 	// Auth
 	auth, err := handlers.NewAuth(ctx, cfg, logger)
@@ -71,6 +72,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 		Cfg:   cfg,
 		Tpl:   tpl,
 		Blog:  blogStore,
+		Atom:  atomStore, // Atom data is stored seperatly, as it is manipulated
 		Auth:  auth,
 		Log:   logger,
 		Start: time.Now(),

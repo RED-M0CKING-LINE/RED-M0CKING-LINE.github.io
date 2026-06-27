@@ -51,13 +51,44 @@ type Store struct {
 	bySlug map[string]*Post
 }
 
+// Resolved WikiLinks
+type resolvedWikilink struct{}
+
 // Creates an empty store
 func New() *Store {
 	return &Store{bySlug: map[string]*Post{}}
 }
 
-// Resolved WikiLinks
-type resolvedWikilink struct{}
+// Clones a store object
+func (s *Store) Clone() *Store {
+	if s == nil {
+		return nil
+	}
+
+	c := &Store{
+		posts:  make([]*Post, len(s.posts)),
+		bySlug: make(map[string]*Post, len(s.bySlug)),
+	}
+
+	for i, p := range s.posts {
+		cp := p.Clone()
+		c.posts[i] = cp
+		if cp != nil {
+			c.bySlug[cp.Slug] = cp
+		}
+	}
+
+	return c
+}
+
+// Clone a post object
+func (p *Post) Clone() *Post {
+	if p == nil {
+		return nil
+	}
+	c := *p
+	return &c
+}
 
 // Load scans dir for *.md files, parses front matter, renders HTML, and populates the store
 // Drafts are skipped unless includeDrafts is true
@@ -131,23 +162,6 @@ func (s *Store) Get(slug string) *Post {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	return s.bySlug[slug]
-}
-
-// LatestUpdate returns the most recent post date in the store, or time.Time{} when empty. Used as Atom <updated>
-func (s *Store) LatestUpdate() time.Time {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	var t time.Time
-	for _, p := range s.posts {
-		d := p.Meta.Updated
-		if d.IsZero() {
-			d = p.Meta.Date
-		}
-		if d.After(t) {
-			t = d
-		}
-	}
-	return t
 }
 
 // Resolve WikiLinks to static blog content
@@ -232,32 +246,4 @@ func postRawToHTML(raw []byte) (template.HTML, error) {
 	}
 	clean := policy.SanitizeBytes(buf.Bytes())
 	return template.HTML(clean), nil
-}
-
-// Truncate the post content string based on line OR character count, and append a string when truncation has occured
-func truncatePostContent(p Post, truncatedAppend string, limitChars uint, limitLines uint) (Post, error) {
-	if (limitChars == 0 && limitLines == 0) || (limitChars != 0 && limitLines != 0) {
-		return p, errors.New("limitChars xor limitLines must be non zero")
-	}
-
-	if limitChars != 0 {
-		runes := []rune(p.Raw)
-		if uint(len(runes)) > limitChars {
-			p.Raw = string(runes[:limitChars]) + truncatedAppend
-		}
-	}
-
-	if limitLines != 0 {
-		lines := strings.Split(p.Raw, "\n")
-		if uint(len(lines)) > limitLines {
-			p.Raw = strings.Join(lines[:limitLines], "\n") + truncatedAppend
-		}
-	}
-	clean, err := postRawToHTML([]byte(p.Raw))
-	if err != nil {
-		errors.New("error converting new raw to html")
-	}
-	p.HTML = clean
-
-	return p, nil
 }
