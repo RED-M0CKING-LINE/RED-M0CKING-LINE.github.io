@@ -6,7 +6,7 @@ services:
       context: ../..
       dockerfile: Containerfile
     # image: ethanashley-net-website-main-go:prod
-    restart: unless-stopped
+    restart: always
     env_file:
       - ../../.env
     environment:
@@ -32,7 +32,7 @@ services:
   nginx:
     container_name: nginx
     image: docker.io/library/nginx:stable-alpine # Switch to dhi.io/nginx eventually
-    restart: unless-stopped
+    restart: always
     depends_on:
       - app
     volumes:
