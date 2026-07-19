@@ -30,7 +30,7 @@ Proxmox installed
 The Minecraft servers are running in Docker containers managed by [Puffer Panel](https://www.pufferpanel.com/) inside an LXC container on Proxmox.
 Besides from not having enough power now, this is a unique configuration in my environment. In this same container, there are other Docker containers running, not managed by Puffer Panel.
 
-# Background
+## Background
 
 I introduced Puffer Panel because I wanted some UI and an easier way to manage my game servers. If I need to change something about one of my services, I don't mind having to be in the CLI, as that is the purpose of that time. If I have to change something for a game server, it's usually a quick change or because it is not working, and I don't want to always have to pull out my laptop and hop in a terminal for that, and that's not how I want to be spending my time at that moment, I want to be playing the game.
 
@@ -61,6 +61,7 @@ To make a new server for this, it was a few clicks to create a new VM from my Al
 
 ![[attachments/d4f32be5.png]]
 
+## Arcane
 
 Setting up Arcane was easy too: just a few commands and a compose file and I was off
 [Installation](https://getarcane.app/docs/setup/installation)
@@ -112,7 +113,43 @@ Then start it with `podman compose up` and the setup password will be in the con
 
 ![[attachments/f5b83a79.png]]
 
+There are a couple of patches I had to make, more than likely due to using Podman instead. Again, it's in beta so this is to be expected.
+To see when SELinux is causing the issues: `sudo ausearch -m avc -ts recent`.
+	Don't be lazy and disable SELinux, learn to use it instead.
 
+`/etc/systemd/system/user@.service.d/podman.conf`
+```
+[Service]
+Delegate=cpu cpuset io memory pids
+
+[Slice]
+TasksMax=80%
+```
+
+```
+sudo systemctl daemon-reload
+```
+
+```
+sudo semanage fcontext -a -t container_var_run_t "/var/run/user/1000/podman(/.*)?"
+sudo restorecon -Rv /run/user/1000/podman
+
+ls -Zd /run/user/1000/podman/podman.sock
+
+sudo semanage fcontext -a -t container_file_t "/home/local-admin/arcane/backups(/.*)?"
+sudo restorecon -Rv /home/local-admin/arcane/backups
+
+sudo semanage fcontext -a -t container_file_t "/home/local-admin/arcane/builds(/.*)?"
+sudo restorecon -Rv /home/local-admin/arcane/builds
+
+sudo semanage fcontext -a -t container_file_t "/home/local-admin/arcane/data(/.*)?"
+sudo restorecon -Rv /home/local-admin/arcane/data
+
+sudo semanage fcontext -a -t container_file_t "/home/local-admin/.local/share/containers/storage/volumes(/.*)?"
+sudo restorecon -Rv /home/local-admin/.local/share/containers/storage/volumes
+```
+
+## Minecraft
 Now, the only thing I am missing is how I am going to deploy my Minecraft servers. During the search, I found this: [Minecraft Server Configurator for Docker](https://setupmc.com) which uses [this container](https://github.com/itzg/docker-minecraft-server). Configurator was useful for getting started, but it doesn't have [all of the options.](https://github.com/itzg/docker-minecraft-server/tree/master/docs/configuration) 
 Now this container is impressive, it can do more server configurations than I knew about, and the configurator makes a stupid easy.
 
