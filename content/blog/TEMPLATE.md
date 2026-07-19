@@ -5,7 +5,8 @@ created: 2026-01-01
 updated: 2026-01-01
 summary: "TEMPLATE"
 author: "Ethan Ashley"
-tags: ["template"]
+tags:
+  - template
 draft: true
 ---
 
