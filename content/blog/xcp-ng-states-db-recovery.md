@@ -11,7 +11,7 @@ draft: false
 
 # Symptoms
 No network interfaces exist
-![[attachments/Pasted image 20260501115548.png]]
+![[attachments/97f61e2e.png]]
 Web UI does not work
 	Firefox gave me the error `PR_CONNECT_RESET_ERROR`
 

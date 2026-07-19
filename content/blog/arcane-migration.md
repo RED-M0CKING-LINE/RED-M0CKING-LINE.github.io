@@ -14,9 +14,9 @@ tags:
 author: Ethan Ashley
 date: 2026-07-18
 created: 2026-07-18
-updated: 2026-07-18
+updated: 2026-07-19
 draft: false
-publish: false
+publish: true
 ---
 
 So as a part of my home lab, as many do, I host game servers. The game servers relevant here are my two Minecraft servers.
@@ -35,7 +35,7 @@ Besides from not having enough power now, this is a unique configuration in my e
 I introduced Puffer Panel because I wanted some UI and an easier way to manage my game servers. If I need to change something about one of my services, I don't mind having to be in the CLI, as that is the purpose of that time. If I have to change something for a game server, it's usually a quick change or because it is not working, and I don't want to always have to pull out my laptop and hop in a terminal for that, and that's not how I want to be spending my time at that moment, I want to be playing the game.
 
 
-![[attachments/Pasted image 20260719001238.png]]
+![[attachments/e9f1cd8b.png]]
 
 
 Puffer Panel works well. I chose it because [Pterodactyl](https://pterodactyl.io/) was overkill, had too much overhead, and seemed like it would possibly become more of a headache than it was worth.
@@ -59,7 +59,7 @@ This server is running XCP-NG with a twin node which it replicates to for disast
 To make a new server for this, it was a few clicks to create a new VM from my Alma Linux template, attaching my on boarding cloud-init config, and sending it. After a while, I had a fresh new VM ready for services.
 
 
-![[attachments/Pasted image 20260719010539.png]]
+![[attachments/d4f32be5.png]]
 
 
 Setting up Arcane was easy too: just a few commands and a compose file and I was off
@@ -108,12 +108,12 @@ Then start it with `podman compose up` and the setup password will be in the con
 > Use random passwords.
 
 
-![[attachments/Pasted image 20260719002318.png]]
+![[attachments/ad454d77.png]]
 
-![[attachments/Pasted image 20260719002421.png]]
+![[attachments/f5b83a79.png]]
 
 
-Now, the only thing I am missing is how I am going to deploy my Minecraft servers. During the search, I found this: [Minecraft Server Configurator for Docker](https://setupmc.com) which uses [this container](https://github.com/itzg/docker-minecraft-server).
+Now, the only thing I am missing is how I am going to deploy my Minecraft servers. During the search, I found this: [Minecraft Server Configurator for Docker](https://setupmc.com) which uses [this container](https://github.com/itzg/docker-minecraft-server). Configurator was useful for getting started, but it doesn't have [all of the options.](https://github.com/itzg/docker-minecraft-server/tree/master/docs/configuration) 
 Now this container is impressive, it can do more server configurations than I knew about, and the configurator makes a stupid easy.
 
 So now we have our compose, but this isn't very templatable for Arcane, so this is what I ended up with:
@@ -122,11 +122,12 @@ So now we have our compose, but this isn't very templatable for Arcane, so this 
 services:
   mc:
     container_name: ${NAME}
-    image: itzg/minecraft-server:stable
+    image: itzg/minecraft-server:${TAG}
+    restart: unless-stopped
     tty: true
     stdin_open: true
     ports:
-      - "25565:25565"
+      - "${PORT}:25565"
     volumes:
       - data:/data:Z
       
@@ -138,12 +139,16 @@ volumes:
 ```env
 NAME="mc-frens"
 CREATE_CONSOLE_IN_PIPE=true
+TAG="stable"
+PORT="25565"
 
 EULA="TRUE"
 VERSION="LATEST"
-MEMORY="6144M"
+INIT_MEMORY="1G"
+MAX_MEMORY="6G"
 MAX_PLAYERS="10"
 MOTD="Ethan Minecraft"
+ICON="https://ethanashley.net/static/img/duck_mini.png"
 USE_AIKAR_FLAGS="true"
 USE_MEOWICE_FLAGS="true"
 TZ="America/New_York"
