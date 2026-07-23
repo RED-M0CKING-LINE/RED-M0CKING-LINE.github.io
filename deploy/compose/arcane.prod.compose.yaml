@@ -1,0 +1,53 @@
+---
+services:
+  app:
+    container_name: website-app
+    build:
+      context: ../..
+      dockerfile: Containerfile
+    # image: ethanashley-net-website-main-go:prod
+    restart: always
+    environment:
+      - APP_ENV=prod
+    # Distroless runs as 65532:65532 (nonroot)
+    user: "65532:65532"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "/app/server", "--version"]  # ENTRYPOINT exits on unknown flag, but exec exists
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    # Healthcheck above is best-effort because distroless has no curl/wget;
+    # k8s manifests use an HTTP probe instead.
+    expose:
+      - "8080"
+
+  nginx:
+    container_name: nginx
+    image: docker.io/library/nginx:stable-alpine # Switch to dhi.io/nginx eventually
+    restart: always
+    depends_on:
+      - app
+    volumes:
+      - ../nginx/conf.d:/etc/nginx/conf.d:ro,Z
+      - ../nginx/keys:/etc/nginx/keys:ro,Z
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro,Z
+    read_only: false
+    healthcheck:
+      # test: ["CMD", "wget", "-qO-", "--no-check-certificate", "https://localhost/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://localhost/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    ports:
+      - "80:80"
+      - "443:443/tcp"
+      - "443:443/udp"
+    expose:
+      - "80"
+      - "443"
