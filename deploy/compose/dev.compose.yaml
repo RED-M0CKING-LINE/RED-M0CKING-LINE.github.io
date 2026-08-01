@@ -31,8 +31,6 @@ services:
 
   nginx:
     container_name: nginx
-    # image: docker.io/library/nginx:stable-alpine
-    # image: dhi.io/nginx:1.30-alpine
     build:
       context: ../nginx
       dockerfile: Containerfile.dev

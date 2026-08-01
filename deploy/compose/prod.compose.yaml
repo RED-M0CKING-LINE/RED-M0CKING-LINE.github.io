@@ -31,14 +31,15 @@ services:
 
   nginx:
     container_name: nginx
-    image: docker.io/library/nginx:stable-alpine # Switch to dhi.io/nginx eventually
+    build:
+      context: ../nginx
+      dockerfile: Containerfile
     restart: always
     depends_on:
       - app
     volumes:
-      - ../nginx/conf.d:/etc/nginx/conf.d:ro,Z
       - ../nginx/keys:/etc/nginx/keys:ro,Z
-      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro,Z
+      - ../../logs/nginx:/var/log/nginx:Z
     read_only: false
     healthcheck:
       # test: ["CMD", "wget", "-qO-", "--no-check-certificate", "https://localhost/healthz"]
