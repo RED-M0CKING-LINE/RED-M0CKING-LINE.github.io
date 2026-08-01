@@ -1,0 +1,45 @@
+ARG ALPINE_VERSION=3.24
+ARG NGINX_VERSION=1.30.4
+ARG HEADERS_MORE_VERSION=0.39
+
+FROM alpine:${ALPINE_VERSION} AS builder
+
+
+
+RUN apk add --no-cache gcc libc-dev make openssl-dev pcre2-dev zlib-dev linux-headers wget git cmake
+
+ARG NGINX_VERSION
+ARG HEADERS_MORE_VERSION
+ENV CFLAGS="-Os -fomit-frame-pointer"
+
+WORKDIR /build
+
+# nginx
+RUN mkdir nginx && \
+    wget -O nginx.tar.gz http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+    tar -xzf nginx.tar.gz -C nginx --strip-components=1
+
+# headers-more
+RUN mkdir headers-more && \
+    wget -O headers-more.tar.gz https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz && \
+    tar -xzf headers-more.tar.gz -C headers-more --strip-components=1
+
+# Brotili
+RUN git clone --depth 1 --recurse-submodules https://github.com/google/ngx_brotli.git
+RUN mkdir -p ngx_brotli/deps/brotli/out && \
+    cd ngx_brotli/deps/brotli/out && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-fPIC" .. && \
+    cmake --build . --config Release --target brotlienc brotlicommon
+
+# Compile nginx with custom modules
+WORKDIR /build/nginx
+RUN ./configure --with-compat \
+    --add-dynamic-module=../headers-more \
+    --add-dynamic-module=../ngx_brotli && \
+    make modules && \
+    rm -rf /build/nginx.tar.gz /build/headers-more.tar.gz /build/ngx_brotli
+
+FROM dhi.io/nginx:${NGINX_VERSION}-alpine${ALPINE_VERSION} AS runtime
+COPY --from=builder /build/nginx/objs/ngx_http_headers_more_filter_module.so /usr/lib/nginx/modules/
+COPY --from=builder /build/nginx/objs/ngx_http_brotli_filter_module.so /usr/lib/nginx/modules/
+COPY --from=builder /build/nginx/objs/ngx_http_brotli_static_module.so /usr/lib/nginx/modules/
