@@ -124,6 +124,8 @@ $RECYCLE.BIN/
 
 !.vscode/website-main-go.code-workspace
 
+/logs
+
 # Build artifacts
 bin/
 web/static/wasm/*

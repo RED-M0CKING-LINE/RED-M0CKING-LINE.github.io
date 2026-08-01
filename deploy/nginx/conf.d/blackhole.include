@@ -3,11 +3,16 @@
 # Block unused methods
 if ($request_method !~ ^(GET|HEAD|POST)$) { return 405; }
 
+# Block file extensions im not using
+location ~* (\.php|\.phtml|\.php3|\.php4|\.phtml|\.shtml|\.jsp|\.jspx|\.jsw|\.jsv|\.jspf|\.woa|\.asp|\.aspx|\.cgi|\.exe|\.pl|\.bat|\.cmd)$  { return 444; }
+
+location ~* ^/(wp-admin|wp-login\.php|admin|phpmyadmin|pma|admin\.php|administrator|cpanel|plesk|webmail) { access_log /var/log/nginx/blackhole.log; return 444; }
+
 
 # 1. Hidden/config directories (.git, .env, IDEs, etc.)
-location ~* (^|/)\.(git|hg|svn|bzr|DS_Store|idea|vscode)(/|$)   { return 444; }
-location ~* (^|/)\.env(\.|$)                                    { return 444; }
-location ~* (^|/)\.(?:bash_history|ssh|aws|npm|yarn)(/|$)       { return 444; }
+location ~* (^|/)\.(git|hg|svn|bzr|DS_Store|idea|vscode)(/|$)   { access_log /var/log/nginx/blackhole.log; return 444; }
+location ~* (^|/)\.env(\.|$)                                    { access_log /var/log/nginx/blackhole.log; return 444; }
+location ~* (^|/)\.(?:bash_history|ssh|aws|npm|yarn)(/|$)       { access_log /var/log/nginx/blackhole.log; return 444; }
 
 # 2. Unused CMS admin / vulnerability scan paths
 location ^~ /administrator/     { return 444; }
@@ -35,7 +40,7 @@ location ~* \.(?:bak|backup|old|orig|save|swp|swo|tmp|sql(?:\.gz)?|tgz|zip|rar)$
 location ^~ /.well-known/   { return 444; }
 
 # 7. Method guard (optional): block rarely used methods
-if ($request_method !~ ^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$) { return 405; }
+#if ($request_method !~ ^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$) { return 405; }
 
 # Block requests based on map
 if ($block_request) { return 444; }

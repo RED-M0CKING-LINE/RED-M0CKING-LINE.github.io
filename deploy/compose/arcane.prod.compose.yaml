@@ -4,7 +4,7 @@ services:
     container_name: website-app
     build:
       context: ../..
-      dockerfile: Containerfile
+      dockerfile: deploy/Containerfile
     # image: ethanashley-net-website-main-go:prod
     restart: always
     environment:

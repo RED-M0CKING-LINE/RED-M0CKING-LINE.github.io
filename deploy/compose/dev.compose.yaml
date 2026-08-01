@@ -4,7 +4,7 @@ services:
     container_name: website-app
     build:
       context: ../..
-      dockerfile: Containerfile
+      dockerfile: deploy/Containerfile.dev
     # image: ethanashley-net-website-main-go:dev
     restart: unless-stopped
     env_file:
@@ -31,14 +31,19 @@ services:
 
   nginx:
     container_name: nginx
-    image: docker.io/library/nginx:stable-alpine
+    # image: docker.io/library/nginx:stable-alpine
+    # image: dhi.io/nginx:1.30-alpine
+    build:
+      context: ../nginx
+      dockerfile: Containerfile.dev
     restart: unless-stopped
     depends_on:
       - app
     volumes:
-      - ../nginx/conf.d:/etc/nginx/conf.d:ro,Z
       - ../nginx/keys:/etc/nginx/keys:ro,Z
+      - ../../logs/nginx:/var/log/nginx:Z
       - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro,Z
+      - ../nginx/conf.d:/etc/nginx/conf.d:ro,Z
     read_only: false
     healthcheck:
       # test: ["CMD", "wget", "-qO-", "--no-check-certificate", "https://localhost/healthz"]
@@ -48,4 +53,8 @@ services:
       retries: 3
     ports:
       - "80:80"
-      - "443:443"
+      - "443:443/tcp"
+      - "443:443/udp"
+    expose:
+      - "80"
+      - "443"

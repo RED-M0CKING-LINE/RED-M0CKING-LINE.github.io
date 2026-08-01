@@ -82,7 +82,7 @@ func run(cfg *config.Config, logger *slog.Logger) error {
 
 	mux := http.NewServeMux()
 	// Static assets: served directly
-	fileServer := http.FileServer(http.Dir(cfg.StaticDir))
+	fileServer := http.FileServerFS(os.DirFS(cfg.StaticDir))
 	mux.Handle("GET /static/", http.StripPrefix("/static/", fileServer))
 
 	// PAGES
