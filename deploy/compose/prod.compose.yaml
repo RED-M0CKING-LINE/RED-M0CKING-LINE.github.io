@@ -48,9 +48,6 @@ services:
       timeout: 3s
       retries: 3
     ports:
-      - "80:80"
-      - "443:443/tcp"
-      - "443:443/udp"
-    expose:
-      - "80"
-      - "443"
+      - "80:8080"
+      - "443:8443/tcp"
+      - "443:8443/udp"
