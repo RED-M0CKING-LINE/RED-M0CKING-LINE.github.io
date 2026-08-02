@@ -1,10 +1,12 @@
 {{define "logo.html"}}
 <img
   class="logo"
-  src="{{ assetURL "/static/img/duck_mini.png"}}"
+  src="{{ assetURL "/static/img/duck/duck_mini.webp"}}"
   width="72"
   height="72"
   alt="Duck Logo"
   aria-hidden="true"
+  decoding="async"
+  fetchpriority="low"
 >
 {{end}}

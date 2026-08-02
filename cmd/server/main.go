@@ -22,11 +22,15 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
 
-	switch os.Args[1] {
-	case "run":
+	if len(os.Args) < 2 {
 		runSite(logger)
-	default:
-		runSite(logger)
+	} else {
+		switch os.Args[1] {
+		case "run":
+			runSite(logger)
+		default:
+			runSite(logger)
+		}
 	}
 }
 
