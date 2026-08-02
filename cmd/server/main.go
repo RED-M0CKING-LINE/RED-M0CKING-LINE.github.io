@@ -22,19 +22,28 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	slog.SetDefault(logger)
 
+	switch os.Args[1] {
+	case "run":
+		runSite(logger)
+	default:
+		runSite(logger)
+	}
+}
+
+func runSite(logger *slog.Logger) {
 	cfg, err := config.Load()
 	if err != nil {
 		logger.Error("config load failed", "err", err)
 		os.Exit(2)
 	}
 
-	if err := run(cfg, logger); err != nil {
+	if err := site(cfg, logger); err != nil {
 		logger.Error("server exited with error", "err", err)
 		os.Exit(1)
 	}
 }
 
-func run(cfg *config.Config, logger *slog.Logger) error {
+func site(cfg *config.Config, logger *slog.Logger) error {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 

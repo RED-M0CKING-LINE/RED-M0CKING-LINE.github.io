@@ -43,14 +43,14 @@ type Config struct {
 // Reads configuration from the process environment
 func Load() (*Config, error) {
 	c := &Config{
-		Addr:            getenv("ADDR", ":8080"),
+		Addr:            getenv("ADDR", ":8888"),
 		ReadTimeout:     getenvDuration("READ_TIMEOUT", 10*time.Second),
 		WriteTimeout:    getenvDuration("WRITE_TIMEOUT", 15*time.Second),
 		ShutdownTimeout: getenvDuration("SHUTDOWN_TIMEOUT", 15*time.Second),
 
 		Env:         getenv("APP_ENV", "dev"),
 		SiteName:    getenv("SITE_NAME", "YOU FORGOT TO LOAD THE ENV FILE"),
-		BaseURL:     getenv("BASE_URL", "http://localhost:8080"),
+		BaseURL:     getenv("BASE_URL", "http://localhost:8888"),
 		ContentDir:  getenv("CONTENT_DIR", "content"),
 		TemplateDir: getenv("TEMPLATE_DIR", "web/templates"),
 		StaticDir:   getenv("STATIC_DIR", "web/static"),
