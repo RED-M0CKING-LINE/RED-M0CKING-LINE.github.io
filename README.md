@@ -88,6 +88,8 @@ OIDC_SCOPES=openid,profile,email
 The container is designed to be stateless so all content is baked into the container. This requires a rebuild of the container to obtain new content.
 Additionally, all runtime states are managed in cookies so that the backend can remain stateless
 
+
+
 ### Markdown authoring
 
 Drop a file into `content/blog/<slug>.md`:
@@ -114,6 +116,23 @@ Posts are loaded on startup
 Drafts (`draft: true`) are hidden in `prod`, visible in `dev`
 
 ---
+
+### Obsidian Syncing
+Instead of creating blog posts directly, you can use the [Obsidian Local REST API plugin](obsidian://show-plugin?id=obsidian-local-rest-api) to  pull posts from your Obsidian vault.
+Install that plugin and enable it. The URL should be `https://127.0.0.1:27124/`. Get your API key and put it in .env for `OBSIDIAN_API_KEY`
+
+#### Using OpenAPI-CodeGen to create the client from the spec file
+Get the spec file: `curl -k -H "Authorization: Bearer $OBSIDIAN_API_KEY" https://127.0.0.1:27124/openapi.yaml -o internal/obsidian/spec.yaml`
+This file may change as the plugin updates too, so use your own
+
+Install the OpenAPI-CodeGen tool: `go get -tool github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest`
+
+Then in `internal/obsidian` run `go generate` to create the client
+
+#### Sync Obsidian content to web content
+
+
+
 
 ### Atom feed
 
