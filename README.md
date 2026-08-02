@@ -131,7 +131,7 @@ Then in `internal/obsidian` run `go generate` to create the client
 
 #### Sync Obsidian content to web content
 
-
+Yeah it doesnt work yet TODO WIP
 
 
 ### Atom feed

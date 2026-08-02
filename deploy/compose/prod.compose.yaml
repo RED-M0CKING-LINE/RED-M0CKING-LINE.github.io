@@ -39,7 +39,7 @@ services:
       - app
     volumes:
       - ../nginx/keys:/etc/nginx/keys:ro,Z
-      - ../../logs/nginx:/var/log/nginx:Z
+      - ../nginx/logs:/var/log/nginx:Z
     read_only: false
     healthcheck:
       # test: ["CMD", "wget", "-qO-", "--no-check-certificate", "https://localhost/healthz"]

@@ -122,16 +122,23 @@ $RECYCLE.BIN/
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
-!.vscode/website-main-go.code-workspace
-
-/logs
+# Reinclude some things that got excluded by the wonderfully generated .gitignore
+!/.vscode/website-main-go.code-workspace
+!/web/static/**
 
 # Build artifacts
-bin/
-web/static/wasm/*
+/bin/
+/web/static/wasm/*
+
+# Logs
+logs/
 
 # Secrets
 *.env
 .env.local
 *.key
 *.crt
+
+# Include the dummy keys
+!/deploy/nginx/keys/dummy.crt
+!/deploy/nginx/keys/dummy.key
