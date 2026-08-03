@@ -1,5 +1,4 @@
-{{define "rss-icon.html"}}
-<svg class="rss-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em"
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em"
     height="1em">
     <rect x="0" y="0" width="24" height="24" rx="5" fill="var(--orange)" />
     <g fill="none" stroke="var(--bg0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -8,4 +7,3 @@
         <circle cx="5" cy="19" r="1" />
     </g>
 </svg>
-{{end}}

@@ -186,5 +186,4 @@ skipped - lint/test/build still gate every PR.
 ## Notes
 - Inline CSS styles are stripped, they must go in the CSS file
 - Both nginx and the app apply security headers, so changes must happen in both places
-
-
+- For nice icons: https://icons8.com
