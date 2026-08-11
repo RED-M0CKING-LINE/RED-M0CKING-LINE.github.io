@@ -8,6 +8,7 @@ tags:
   - curious
   - linux
   - qos
+  - howto
 author: Ethan Ashley
 created: 2025-04-07
 updated: 2025-04-12

@@ -1,0 +1,112 @@
+##### FILE TYPES #####
+
+# Raster images
+web/static/**/*.avif    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.webp    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.jpg     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.jpeg    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.png     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.gif     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.heic    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.heif    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.tif     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.tiff    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.bmp     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.ico     filter=lfs diff=lfs merge=lfs -text
+
+# Fonts
+web/static/**/*.woff    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.woff2   filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.ttf     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.otf     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.eot     filter=lfs diff=lfs merge=lfs -text
+
+# Video
+web/static/**/*.mp4     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.webm    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.mov     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.m4v     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.avi     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.mkv     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.ogv     filter=lfs diff=lfs merge=lfs -text
+
+# Audio
+web/static/**/*.mp3     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.ogg     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.oga     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.opus    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.wav     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.flac    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.aac     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.m4a     filter=lfs diff=lfs merge=lfs -text
+
+# Web-delivered binaries and downloads
+web/static/**/*.wasm    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.pdf     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.epub    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.zip     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.7z      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.tar     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.gz      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.bz2     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.xz      filter=lfs diff=lfs merge=lfs -text
+
+# Adobe and general design assets
+web/static/**/*.psd     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.psb     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.ai      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.aep     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.aepx    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.indd    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.idml    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.xd      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.sketch  filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.fig     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.blend   filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.kra     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.clip    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.xcf     filter=lfs diff=lfs merge=lfs -text
+
+# 3D assets
+web/static/**/*.fbx     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.obj     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.glb     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.gltf    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.stl     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.3ds     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.dae     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.usdz    filter=lfs diff=lfs merge=lfs -text
+
+# Data
+web/static/**/*.parquet filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.feather filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.arrow   filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.h5      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.hdf5    filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.db      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.sqlite  filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.sqlite3 filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.pkl     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.pickle  filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.npy     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.npz     filter=lfs diff=lfs merge=lfs -text
+
+# Binaries and packages
+web/static/**/*.bin     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.exe     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.dll     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.so      filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.dylib   filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.jar     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.war     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.apk     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.deb     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.rpm     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.iso     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.img     filter=lfs diff=lfs merge=lfs -text
+web/static/**/*.dmg     filter=lfs diff=lfs merge=lfs -text
+
+
+##### OTHER STUFF LATER MAYBE #####
+
+
