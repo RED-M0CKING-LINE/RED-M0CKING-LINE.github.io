@@ -48,8 +48,8 @@ func (p *Pages) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	posts := p.Blog.All()
-	if len(posts) > 3 {
-		posts = posts[:3]
+	if len(posts) > 5 {
+		posts = posts[:5]
 	}
 	_ = p.Tpl.Render(w, "home", p.base(r, "home", map[string]any{
 		"RecentPosts": posts,
