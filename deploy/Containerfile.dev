@@ -41,12 +41,13 @@ RUN mkdir -p /out/web /out/content && \
     cp -r content/blog /out/content/blog
 
 # minify
-RUN minify -r \
+RUN minify -rv \
     --match='\.css$|\.js$|\.svg$|\.html$' \
     --exclude='^/wasm/' \
     -o /out/web/static \
     /out/web/static
 
+# runtime
 FROM gcr.io/distroless/static-debian12:nonroot AS runtime
 
 WORKDIR /app
@@ -67,5 +68,3 @@ ENV ADDR=":8080" \
 # Probe /healthz directly, thats where health is
 
 ENTRYPOINT ["/app/server"]
-
-

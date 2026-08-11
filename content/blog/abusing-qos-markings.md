@@ -1,6 +1,6 @@
 ---
 date: 2026-08-10
-title: Abusing QoS Markings
+title: Experimenting with QoS Markings
 summary: Some notes from when I had the splended idea to see if my university had a trust boundary configured.
 tags:
   - networking

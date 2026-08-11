@@ -39,7 +39,7 @@ services:
       - app
     volumes:
       - ../nginx/keys:/etc/nginx/keys:ro,Z
-      - ../../logs/nginx:/var/log/nginx:Z
+      - ../nginx/logs:/var/log/nginx:Z
       - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro,Z
       - ../nginx/conf.d:/etc/nginx/conf.d:ro,Z
     read_only: false
