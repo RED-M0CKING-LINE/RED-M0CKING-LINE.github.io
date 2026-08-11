@@ -4,6 +4,13 @@
 
 ## Quickstart
 
+This repo uses Git LFS
+```
+dnf install git-lfs
+git lfs install
+git lfs pull
+```
+
 Make environment variables based on template
 
 Set environment variables

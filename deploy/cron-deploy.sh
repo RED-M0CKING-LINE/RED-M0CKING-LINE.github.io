@@ -14,6 +14,7 @@ BRANCH="prod"
 cd "${WEB_PROJECT_ROOT}"
 
 git fetch origin "${BRANCH}"
+git lfs fetch origin "${BRANCH}"
 
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse "origin/${BRANCH}")
@@ -25,6 +26,7 @@ fi
 
 echo "New commits detected: ${LOCAL:0:8} -> ${REMOTE:0:8}"
 git pull origin "${BRANCH}"
+git lfs pull origin "${BRANCH}"
 
 echo "Building new stack..."
 podman-compose -f "${COMPOSE_FILE}" build
