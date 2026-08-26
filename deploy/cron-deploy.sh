@@ -14,7 +14,7 @@ BRANCH="prod"
 cd "${WEB_PROJECT_ROOT}"
 
 git fetch origin "${BRANCH}"
-git lfs fetch"
+git lfs fetch
 
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse "origin/${BRANCH}")
