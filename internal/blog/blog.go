@@ -240,10 +240,49 @@ func postRawToHTML(raw []byte) (template.HTML, error) {
 	policy.AllowAttrs("class").OnElements(
 		"svg", "path", "g", "circle", "rect", "line", "polyline", "polygon", "summary")
 
+	raw = preserveIndent(raw)
+
 	var buf bytes.Buffer
 	if err := md.Convert(raw, &buf); err != nil {
 		return "", errors.New("error rendering HTML")
 	}
 	clean := policy.SanitizeBytes(buf.Bytes())
 	return template.HTML(clean), nil
+}
+
+// preserveIndent converts leading spaces/tabs on ordinary lines into non-breaking spaces
+// CommonMark's leading-whitespace trim removes them before parsing
+// Ignores code blocks
+func preserveIndent(raw []byte) []byte {
+	lines := bytes.Split(raw, []byte("\n"))
+	inFence := false
+
+	for i, line := range lines {
+		trimmed := bytes.TrimLeft(line, " \t")
+
+		if bytes.HasPrefix(trimmed, []byte("```")) || bytes.HasPrefix(trimmed, []byte("~~~")) {
+			inFence = !inFence
+			continue
+		}
+		if inFence {
+			continue
+		}
+
+		lead := len(line) - len(trimmed)
+		if lead == 0 {
+			continue
+		}
+
+		var indent bytes.Buffer
+		for _, ch := range line[:lead] {
+			if ch == '\t' {
+				indent.WriteString("&nbsp;&nbsp;&nbsp;&nbsp;")
+			} else {
+				indent.WriteString("&nbsp;")
+			}
+		}
+		lines[i] = append(indent.Bytes(), trimmed...)
+	}
+
+	return bytes.Join(lines, []byte("\n"))
 }
