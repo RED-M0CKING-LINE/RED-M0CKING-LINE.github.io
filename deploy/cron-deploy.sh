@@ -19,7 +19,7 @@ git lfs fetch
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse "origin/${BRANCH}")
 
-if [ "${LOCAL}" = "${REMOTE}" ]; then
+if [ "${LOCAL}" = "${REMOTE}" ] && [ "$1" != "force" ]; then
     echo "No changes (${LOCAL:0:8})..."
     exit 0
 fi
