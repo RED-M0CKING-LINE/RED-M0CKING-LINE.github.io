@@ -35,6 +35,6 @@ echo "Bringing stack down..."
 podman-compose -f "${COMPOSE_FILE}" down
 
 echo "Starting stack..."
-podman-compose -f "${COMPOSE_FILE}" up -d
+podman-compose -f "${COMPOSE_FILE}" up -d --force-recreate
 
 echo "Deploy complete!"

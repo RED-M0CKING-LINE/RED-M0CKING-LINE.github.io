@@ -1,5 +1,5 @@
 ---
-date: 2026-08-26
+date: 2026-08-29
 title: Dot1x deployment and its problems
 summary: A summary of some of the problems and cool stuff I encountered when deploying 802.1X
 tags:
@@ -8,7 +8,7 @@ tags:
   - networking
 author: Ethan Ashley
 created: 2026-08-18
-updated: 2026-08-26
+updated: 2026-08-29
 draft: false
 publish: true
 ---
