@@ -2,14 +2,18 @@
 # This uses aggressive caching and requires Buildkit to be enabled/supported
 
 ARG GO_VERSION=1.25
+ARG MINIFY_VERSION=latest # v2.24.17
+
 FROM docker.io/library/golang:${GO_VERSION}-alpine AS builder
+
+ARG MINIFY_VERSION
 
 WORKDIR /src
 
 # For minifying sources at build time
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    go install github.com/tdewolff/minify/v2/cmd/minify@v2.24.13
+    go install github.com/tdewolff/minify/v2/cmd/minify@${MINIFY_VERSION}
 
 
 # Install modules
