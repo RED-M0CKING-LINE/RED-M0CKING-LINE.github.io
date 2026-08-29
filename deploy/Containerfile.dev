@@ -1,7 +1,7 @@
 # podman first, docker later
 # This uses aggressive caching and requires Buildkit to be enabled/supported
 
-ARG GO_VERSION=1.25
+ARG GO_VERSION=1.27
 ARG MINIFY_VERSION=latest # v2.24.17
 
 FROM docker.io/library/golang:${GO_VERSION}-alpine AS builder
