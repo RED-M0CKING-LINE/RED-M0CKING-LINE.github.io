@@ -229,6 +229,11 @@ img { max-width: 100%; height: auto; }
 .kv dt { color: var(--text-muted); }
 .kv dd { margin: 0; color: var(--fg0); word-break: break-all; }
 
+/* Resume */
+#pin-form { display: flex; gap: var(--space-2); margin: var(--space-4) 0; flex-wrap: wrap; }
+#pin-form input { flex: 1; min-width: 220px; padding: var(--space-2) var(--space-3); background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); font: inherit; font-family: var(--font-mono); }
+#pin-form input:focus { border-color: var(--accent); outline: none; }
+
 /* Notices */
 .notice { padding: var(--space-4) var(--space-6); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: var(--space-6); }
 .notice-warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, var(--surface-2)); }

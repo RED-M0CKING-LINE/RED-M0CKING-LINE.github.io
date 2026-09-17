@@ -105,6 +105,7 @@ func site(cfg *config.Config, logger *slog.Logger) error {
 	mux.HandleFunc("GET /blog/{slug}", pages.BlogPost)
 	mux.HandleFunc("GET /tools", pages.Tools)
 	mux.HandleFunc("GET /protected", auth.RequireAuth(pages.Protected))
+	mux.HandleFunc("GET /resume", pages.Resume)
 
 	// Feeds & SEO
 	mux.HandleFunc("GET /feed.xml", pages.Feed)
